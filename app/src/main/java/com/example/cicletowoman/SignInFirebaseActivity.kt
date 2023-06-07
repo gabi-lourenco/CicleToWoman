@@ -28,15 +28,21 @@ class SignInFirebaseActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
+        checkLogin()
+
         btnGoogleSignIn.setOnClickListener {
-            val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.webclient_id))
-                .requestEmail()
-                .build()
-            val signInClient = GoogleSignIn.getClient(this, options)
-            signInClient.signInIntent.also {
-                startActivityForResult(it, REQUEST_CODE_SIGN_IN)
-            }
+            checkLogin()
+        }
+    }
+
+    private fun checkLogin() {
+        val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.webclient_id))
+            .requestEmail()
+            .build()
+        val signInClient = GoogleSignIn.getClient(this, options)
+        signInClient.signInIntent.also {
+            startActivityForResult(it, REQUEST_CODE_SIGN_IN)
         }
     }
 
@@ -52,6 +58,10 @@ class SignInFirebaseActivity : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
                 }
+                startActivity(
+                    Intent(
+                    this@SignInFirebaseActivity, FirstPeriodActivity::class.java)
+                )
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
