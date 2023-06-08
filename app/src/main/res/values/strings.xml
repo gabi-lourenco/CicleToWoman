@@ -9,5 +9,7 @@
     <string name="first_status_cycle_not_created_title">Ainda há tempo</string>
     <string name="first_status_cycle_not_created">Você ainda não definiu um ciclo</string>
     <string name="first_status_cycle_create_text_button">Criar</string>
+    <string name="first_status_cycle_history_text_button">Histórico</string>
+    <string name="first_status_cycle_history_edit_text_button">Editar</string>
     <string name="webclient_id">159132313642-htc5p54sp04j718kgf5u8d5t4nvak123.apps.googleusercontent.com</string>
 </resources>
