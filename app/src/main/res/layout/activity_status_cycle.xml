@@ -27,6 +27,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtCycleTitle" />
 
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnCreate"
+        app:layout_constraintTop_toBottomOf="@+id/txtCycleMessageDescription"
+        tools:layout_editor_absoluteX="16dp" />
+
     <Button
         android:id="@+id/btnCreate"
         style="@style/Widget.AppCompat.Button.Colored"
@@ -36,7 +44,8 @@
         android:text="@string/first_status_cycle_create_text_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCycleMessageDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/pieChart_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

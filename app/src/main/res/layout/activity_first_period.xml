@@ -44,11 +44,13 @@
     <Button
         android:id="@+id/btnLater"
         style="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
-        android:layout_width="204dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
-        android:textAlignment="center"
+        android:layout_marginEnd="8dp"
         android:text="@string/first_period_add_later_text_button"
+        android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@+id/btnContinue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cosmo_calendar" />
@@ -56,11 +58,13 @@
     <Button
         android:id="@+id/btnContinue"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="204dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:textAlignment="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/first_period_continue_text_button"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnLater" />
