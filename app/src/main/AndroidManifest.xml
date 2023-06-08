@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.cicletowoman.SignInFirebaseActivity"
+        <activity android:name="com.example.cicletowoman.activities.SignInFirebaseActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,13 +18,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.cicletowoman.FirstPeriodActivity"
+        <activity android:name="com.example.cicletowoman.activities.FirstPeriodActivity"
             android:exported="true" />
 
-        <activity android:name="com.example.cicletowoman.StatusCycleActivity"
+        <activity android:name="com.example.cicletowoman.activities.StatusCycleActivity"
             android:exported="true" />
 
-        <activity android:name="com.example.cicletowoman.HistoryActivity"
+        <activity android:name="com.example.cicletowoman.activities.HistoryActivity"
             android:exported="true" />
     </application>
 </manifest>

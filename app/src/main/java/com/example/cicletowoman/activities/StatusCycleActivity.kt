@@ -1,12 +1,13 @@
-package com.example.cicletowoman
+package com.example.cicletowoman.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import com.example.cicletowoman.FirstPeriodActivity.Companion.END_DATE
-import com.example.cicletowoman.FirstPeriodActivity.Companion.START_DATE
+import com.example.cicletowoman.R
+import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE
+import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet

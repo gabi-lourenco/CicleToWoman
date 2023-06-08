@@ -1,4 +1,4 @@
-package com.example.cicletowoman
+package com.example.cicletowoman.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
+import com.example.cicletowoman.R
 import kotlinx.android.synthetic.main.activity_first_period.*
 import java.text.SimpleDateFormat
 import java.util.*

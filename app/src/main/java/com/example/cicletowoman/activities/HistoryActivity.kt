@@ -1,4 +1,4 @@
-package com.example.cicletowoman
+package com.example.cicletowoman.activities
 
 import android.os.Build
 import android.os.Bundle
@@ -7,8 +7,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.applikeysolutions.cosmocalendar.selection.SingleSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
+import com.example.cicletowoman.R
 import com.example.cicletowoman.bottomsheet.EditDayBottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_first_period.*
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_history.cosmo_calendar
