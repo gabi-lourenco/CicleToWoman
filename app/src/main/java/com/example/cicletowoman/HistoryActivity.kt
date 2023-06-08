@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.applikeysolutions.cosmocalendar.selection.SingleSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
+import com.example.cicletowoman.bottomsheet.EditDayBottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_first_period.*
 import kotlinx.android.synthetic.main.activity_history.*
@@ -35,7 +36,7 @@ class HistoryActivity : AppCompatActivity() {
             if (cosmo_calendar.selectionManager is SingleSelectionManager) {
                 val rangeManager = cosmo_calendar.selectionManager as SingleSelectionManager
                 if (rangeManager != null) {
-                    showBottomSheetDialog()
+                    showBottomSheetDialogDayDetails()
                 } else {
                     Toast.makeText(
                         this,
@@ -47,10 +48,8 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun showBottomSheetDialog() {
-        val bottomSheetDialog = BottomSheetDialog(this)
-        bottomSheetDialog.setContentView(R.layout.bottom_sheet_edit_day_history)
-
-        bottomSheetDialog.show()
+    private fun showBottomSheetDialogDayDetails() {
+        val modalBottomSheet = EditDayBottomSheetDialog()
+        modalBottomSheet.show(supportFragmentManager, EditDayBottomSheetDialog.TAG)
     }
 }
