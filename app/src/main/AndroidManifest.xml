@@ -20,5 +20,8 @@
 
         <activity android:name="com.example.cicletowoman.FirstPeriodActivity"
             android:exported="true" />
+
+        <activity android:name="com.example.cicletowoman.StatusCycleActivity"
+            android:exported="true" />
     </application>
 </manifest>

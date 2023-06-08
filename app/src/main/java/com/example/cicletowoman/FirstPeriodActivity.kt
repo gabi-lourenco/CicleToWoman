@@ -1,14 +1,16 @@
 package com.example.cicletowoman
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cicletowoman.utils.getDateFormatPTBR
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
 import kotlinx.android.synthetic.main.activity_first_period.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 class FirstPeriodActivity : AppCompatActivity() {
@@ -38,11 +40,15 @@ class FirstPeriodActivity : AppCompatActivity() {
                 if (rangeManager != null) {
                     startDate = getDateFormatPTBR(rangeManager.days.first?.calendar?.timeInMillis)
                     endDate = getDateFormatPTBR(rangeManager.days.second?.calendar?.timeInMillis)
-                    Toast.makeText(
-                        this@FirstPeriodActivity,
-                        "Data inicial: $startDate \n Data final: $endDate",
-                        Toast.LENGTH_LONG
-                    ).show()
+
+                    startActivity(
+                        Intent(
+                            this@FirstPeriodActivity,
+                            StatusCycleActivity::class.java).apply {
+                                putExtra(START_DATE, startDate)
+                                putExtra(END_DATE, endDate)
+                        }
+                    )
                 } else {
                     Toast.makeText(
                         this@FirstPeriodActivity,
@@ -52,5 +58,23 @@ class FirstPeriodActivity : AppCompatActivity() {
                 }
             }
         }
+
+        btnLater.setOnClickListener {
+            startActivity(
+                Intent(this@FirstPeriodActivity, StatusCycleActivity::class.java)
+            )
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getDateFormatPTBR(timeInMillis: Long?): String {
+        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+
+        return simpleDateFormat.format(timeInMillis)
+    }
+
+    companion object {
+        const val START_DATE = "START_DATE"
+        const val END_DATE = "END_DATE"
     }
 }
