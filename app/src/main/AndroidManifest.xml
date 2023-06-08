@@ -23,5 +23,8 @@
 
         <activity android:name="com.example.cicletowoman.StatusCycleActivity"
             android:exported="true" />
+
+        <activity android:name="com.example.cicletowoman.HistoryActivity"
+            android:exported="true" />
     </application>
 </manifest>

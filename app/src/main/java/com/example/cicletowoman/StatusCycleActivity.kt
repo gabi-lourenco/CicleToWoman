@@ -1,5 +1,6 @@
 package com.example.cicletowoman
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,7 @@ class StatusCycleActivity : AppCompatActivity() {
             txtCycleTitle.text = getString(R.string.first_status_cycle_not_created_title)
             txtCycleMessageDescription.text = getString(R.string.first_status_cycle_not_created)
             btnCreate.isVisible = true
+            btnHistory.isVisible = false
             pieChart_view.isVisible = false
 
             btnCreate.setOnClickListener {
@@ -38,10 +40,19 @@ class StatusCycleActivity : AppCompatActivity() {
             txtCycleTitle.text = getString(R.string.first_status_cycle_title)
             txtCycleMessageDescription.isVisible = false
             btnCreate.isVisible = false
+            btnHistory.isVisible = true
 
             showPieChart()
 
             pieChart_view.isVisible = true
+
+            btnHistory.setOnClickListener {
+                startActivity(
+                    Intent(
+                        this@StatusCycleActivity,
+                        HistoryActivity::class.java)
+                )
+            }
         }
     }
 
