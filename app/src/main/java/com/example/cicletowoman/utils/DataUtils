@@ -1,0 +1,9 @@
+package com.example.cicletowoman.utils
+
+import java.text.SimpleDateFormat
+
+fun getDateFormatPTBR(timeInMillis: Long?): String {
+    val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+
+    return simpleDateFormat.format(timeInMillis)
+}

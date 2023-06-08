@@ -9,20 +9,20 @@
 
     <TextView
         android:id="@+id/txtFirstPeriodTitle"
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Title"
-        android:text="@string/first_periodo_title"
+        android:text="@string/first_period_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtFirstPeriodPredit"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:text="@string/first_periodo_predict_text"
+        android:text="@string/first_period_predict_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtFirstPeriodTitle" />
@@ -34,19 +34,33 @@
         android:layout_marginTop="32dp"
         android:layout_marginBottom="24dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
         app:layout_constraintTop_toBottomOf="@+id/txtFirstPeriodPredit"
+        app:selectedDayBackgroundColor="@android:color/holo_red_dark"
+        app:selectedDayBackgroundEndColor="@android:color/holo_red_dark"
+        app:selectedDayBackgroundStartColor="@android:color/holo_red_dark"
         tools:layout_editor_absoluteX="16dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnLater"
         style="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
-        android:layout_width="wrap_content"
+        android:layout_width="204dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/first_period_add_later_text_button"
+        app:layout_constraintEnd_toStartOf="@+id/btnContinue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cosmo_calendar" />
+
+    <Button
+        android:id="@+id/btnContinue"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="204dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="18dp"
-        android:text="@string/first_periodo_continue_text_button"
+        android:text="@string/first_period_continue_text_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/btnLater" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

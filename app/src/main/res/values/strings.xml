@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Cicle to Woman</string>
     <string name="login_google_signin_text">Entrar com o Google</string>
-    <string name="first_periodo_title">Seu último ciclo começou quando?</string>
-    <string name="first_periodo_predict_text">Assim podemos prever o próximo.</string>
-    <string name="first_periodo_continue_text_button">Continuar</string>
+    <string name="first_period_title">Seu último ciclo começou quando?</string>
+    <string name="first_period_predict_text">Assim podemos prever o próximo.</string>
+    <string name="first_period_continue_text_button">Continuar</string>
+    <string name="first_period_add_later_text_button">Mais tarde</string>
     <string name="webclient_id">159132313642-htc5p54sp04j718kgf5u8d5t4nvak123.apps.googleusercontent.com</string>
 </resources>
