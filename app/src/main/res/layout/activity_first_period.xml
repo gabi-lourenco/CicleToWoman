@@ -4,18 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".activities.SignInFirebaseActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/firstPeriodtoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="some title"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/txtFirstPeriodTitle"
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/first_period_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/firstPeriodtoolbar" />
 
     <TextView
         android:id="@+id/txtFirstPeriodPredit"
