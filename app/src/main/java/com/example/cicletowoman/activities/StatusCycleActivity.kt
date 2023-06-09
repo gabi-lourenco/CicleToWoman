@@ -2,12 +2,13 @@ package com.example.cicletowoman.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.cicletowoman.R
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE
+import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE_MILLIS
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE
+import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE_MILLIS
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -21,7 +22,9 @@ class StatusCycleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_status_cycle)
 
         val startDate = intent.extras?.getString(START_DATE)
+        val startDateMillis = intent.extras?.getLong(START_DATE_MILLIS)
         val endDate = intent.extras?.getString(END_DATE)
+        val endDateMillis = intent.extras?.getLong(END_DATE_MILLIS)
 
         if (startDate.isNullOrEmpty() && endDate.isNullOrEmpty()) {
             txtCycleTitle.text = getString(R.string.first_status_cycle_not_created_title)
@@ -31,11 +34,10 @@ class StatusCycleActivity : AppCompatActivity() {
             pieChart_view.isVisible = false
 
             btnCreate.setOnClickListener {
-                Toast.makeText(
-                    this,
-                    "Data inicial: $startDate \n Data final: $endDate",
-                    Toast.LENGTH_LONG
-                ).show()
+                startActivity(
+                    Intent(
+                        this@StatusCycleActivity, FirstPeriodActivity::class.java)
+                )
             }
         } else {
             txtCycleTitle.text = getString(R.string.first_status_cycle_title)
@@ -51,7 +53,10 @@ class StatusCycleActivity : AppCompatActivity() {
                 startActivity(
                     Intent(
                         this@StatusCycleActivity,
-                        HistoryActivity::class.java)
+                        HistoryActivity::class.java).apply {
+                            putExtra(START_DATE, startDateMillis)
+                            putExtra(END_DATE, endDateMillis)
+                    }
                 )
             }
         }
