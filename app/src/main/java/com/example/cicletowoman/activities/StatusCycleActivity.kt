@@ -7,11 +7,15 @@ import android.graphics.Typeface
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.room.Room
+import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE_MILLIS
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE_MILLIS
+import com.example.cicletowoman.database.AppDatabase
+import com.example.cicletowoman.entities.ActualCycle
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -32,12 +36,17 @@ class StatusCycleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status_cycle)
 
+        val cycle = MyApplication.database!!.userDao().findByRunning()
+
         val startDate = intent.extras?.getString(START_DATE)
         startDateMillis = intent.extras?.getLong(START_DATE_MILLIS)
         val endDate = intent.extras?.getString(END_DATE)
         endDateMillis = intent.extras?.getLong(END_DATE_MILLIS)
 
-        if (startDate.isNullOrEmpty() && endDate.isNullOrEmpty()) {
+        try {
+            setDataCycleRunning(cycle)
+        }
+        catch (e: Exception) {
             txtCycleTitle.text = getString(R.string.first_status_cycle_not_created_title)
             txtCycleMessageDescription.text = getString(R.string.first_status_cycle_not_created)
             btnCreate.isVisible = true
@@ -50,33 +59,35 @@ class StatusCycleActivity : AppCompatActivity() {
                         this@StatusCycleActivity, FirstPeriodActivity::class.java)
                 )
             }
-        } else {
-            txtCycleTitle.text = getString(R.string.first_status_cycle_title)
-            txtCycleMessageDescription.isVisible = false
-            btnCreate.isVisible = false
-            btnHistory.isVisible = true
-
-            startDay = getDateFormatPTBR(startDateMillis)
-            endDay = getDateFormatPTBR(endDateMillis)
-
-            showPieChart()
-
-            pieChart_view.isVisible = true
-
-            btnHistory.setOnClickListener {
-                startActivity(
-                    Intent(
-                        this@StatusCycleActivity,
-                        HistoryActivity::class.java).apply {
-                            putExtra(START_DATE, startDateMillis)
-                            putExtra(END_DATE, endDateMillis)
-                    }
-                )
-            }
         }
     }
 
-    private fun showPieChart() {
+    private fun setDataCycleRunning(cycle: ActualCycle) {
+        txtCycleTitle.text = getString(R.string.first_status_cycle_title)
+        txtCycleMessageDescription.isVisible = false
+        btnCreate.isVisible = false
+        btnHistory.isVisible = true
+
+        startDay = getDateFormatPTBR(cycle.startDateInMillis)
+        endDay = getDateFormatPTBR(cycle.endDateInMillis)
+
+        showPieChart(cycle)
+
+        pieChart_view.isVisible = true
+
+        btnHistory.setOnClickListener {
+            startActivity(
+                Intent(
+                    this@StatusCycleActivity,
+                    HistoryActivity::class.java).apply {
+                    putExtra(START_DATE, cycle.startDateInMillis)
+                    putExtra(END_DATE, cycle.endDateInMillis)
+                }
+            )
+        }
+    }
+
+    private fun showPieChart(actualCycle: ActualCycle) {
         val pieColors: ArrayList<Int> = ArrayList()
         pieColors.add(Color.parseColor("#FF0000"))
         pieColors.add(Color.parseColor("#2473C8"))
@@ -84,7 +95,7 @@ class StatusCycleActivity : AppCompatActivity() {
         pieColors.add(Color.parseColor("#185EAA"))
 
         val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = startDateMillis!!
+        calendar.timeInMillis = actualCycle.startDateInMillis!!
         var inicialDay = endDay.substring(0, 2).toInt() - startDay.substring(0, 2).toInt()
         calendar.add(Calendar.DATE, inicialDay + 7)
         var normalOne = getDateFormatPTBR(calendar.timeInMillis)

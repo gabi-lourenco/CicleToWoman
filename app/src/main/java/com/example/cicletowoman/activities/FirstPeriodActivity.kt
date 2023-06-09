@@ -9,9 +9,11 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
+import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
 import com.example.cicletowoman.constants.TablesNames
 import com.example.cicletowoman.data.FirstPeriodData
+import com.example.cicletowoman.entities.ActualCycle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_first_period.*
@@ -51,6 +53,34 @@ class FirstPeriodActivity : AppCompatActivity() {
                     startDate = getDateFormatPTBR(startDateTimeInMillis)
                     endDateTimeInMillis = rangeManager.days.second?.calendar?.timeInMillis
                     endDate = getDateFormatPTBR(endDateTimeInMillis)
+
+                    val calendar: Calendar = Calendar.getInstance()
+                    calendar.timeInMillis = startDateTimeInMillis!!
+                    var inicialDay = endDate!!.substring(0, 2).toInt() - startDate!!.substring(0, 2).toInt()
+                    calendar.add(Calendar.DATE, inicialDay + 7)
+                    var normalOne = getDateFormatPTBR(calendar.timeInMillis)
+                    calendar.add(Calendar.DATE, 5)
+                    var fertileDays = getDateFormatPTBR(calendar.timeInMillis)
+                    calendar.add(Calendar.DATE, 12)
+                    var endDays = getDateFormatPTBR(calendar.timeInMillis)
+
+                    val userDao = MyApplication.database!!.userDao()
+                    userDao.insert(
+                        ActualCycle(
+                            uid = UUID.randomUUID().toString(),
+                            startDate = startDate,
+                            endDate = endDate,
+                            neutralStartFirst = endDate,
+                            neutralEndFirst = normalOne,
+                            startFertility = normalOne,
+                            endFertility = fertileDays,
+                            neutralStartLast = fertileDays,
+                            neutralEndLast = endDays,
+                            startDateInMillis = startDateTimeInMillis,
+                            endDateInMillis = endDateTimeInMillis,
+                            actual = true
+                        )
+                    )
 
                     startActivity(
                         Intent(
