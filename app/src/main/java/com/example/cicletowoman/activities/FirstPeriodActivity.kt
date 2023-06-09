@@ -58,8 +58,8 @@ class FirstPeriodActivity : AppCompatActivity() {
                             StatusCycleActivity::class.java).apply {
                             putExtra(START_DATE, startDate)
                             putExtra(END_DATE, endDate)
-                            putExtra(START_DATE_MILLIS, rangeManager.days.first?.calendar?.timeInMillis)
-                            putExtra(END_DATE_MILLIS, rangeManager.days.second?.calendar?.timeInMillis)
+                            putExtra(START_DATE_MILLIS, startDateTimeInMillis)
+                            putExtra(END_DATE_MILLIS, endDateTimeInMillis)
                         }
                     )
                 } else {
