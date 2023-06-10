@@ -22,11 +22,14 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_status_cycle.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 class StatusCycleActivity : AppCompatActivity() {
+
+    lateinit var auth : FirebaseAuth
 
     var startDay: String = ""
     var endDay: String = ""
@@ -37,7 +40,10 @@ class StatusCycleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status_cycle)
         setSupportActionBar(cycletoolbar)
-        val cycle = MyApplication.database!!.userDao().findByRunning()
+
+        auth = FirebaseAuth.getInstance()
+
+        val cycle = MyApplication.database!!.cycleDao().findByRunning(auth.currentUser!!.uid)
 
         val startDate = intent.extras?.getString(START_DATE)
         startDateMillis = intent.extras?.getLong(START_DATE_MILLIS)
@@ -109,7 +115,7 @@ class StatusCycleActivity : AppCompatActivity() {
         }
 
         btnDelete.setOnClickListener {
-            val cycle = MyApplication.database!!.userDao().findByRunning()
+            val cycle = MyApplication.database!!.cycleDao().findByRunning(auth.currentUser!!.uid)
 
             val builder = AlertDialog.Builder(this)
 
@@ -117,7 +123,7 @@ class StatusCycleActivity : AppCompatActivity() {
             builder.setMessage(R.string.first_status_cycle_delete_messsage)
 
             builder.setPositiveButton(R.string.first_status_cycle_delete_text_yes) { dialog, which ->
-                MyApplication.database!!.userDao().delete(cycle)
+                MyApplication.database!!.cycleDao().delete(auth.currentUser!!.uid)
                 Toast.makeText(
                     this,
                     "Dados apagados com sucesso!",

@@ -11,8 +11,6 @@ import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
 import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
-import com.example.cicletowoman.constants.TablesNames
-import com.example.cicletowoman.data.FirstPeriodData
 import com.example.cicletowoman.entities.ActualCycle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -66,7 +64,7 @@ class FirstPeriodActivity : AppCompatActivity() {
                     calendar.add(Calendar.DATE, 12)
                     var endDays = getDateFormatPTBR(calendar.timeInMillis)
 
-                    val userDao = MyApplication.database!!.userDao()
+                    val userDao = MyApplication.database!!.cycleDao()
                     userDao.insert(
                         ActualCycle(
                             uid = auth.currentUser!!.uid,
@@ -86,14 +84,7 @@ class FirstPeriodActivity : AppCompatActivity() {
 
                     startActivity(
                         Intent(
-                            this@FirstPeriodActivity,
-                            StatusCycleActivity::class.java).apply {
-                            putExtra(START_DATE, startDate)
-                            putExtra(END_DATE, endDate)
-                            putExtra(START_DATE_MILLIS, startDateTimeInMillis)
-                            putExtra(END_DATE_MILLIS, endDateTimeInMillis)
-                        }
-                    )
+                            this@FirstPeriodActivity, StatusCycleActivity::class.java))
                 } else {
                     Toast.makeText(
                         this@FirstPeriodActivity,

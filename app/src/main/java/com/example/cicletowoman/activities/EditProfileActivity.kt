@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_first_period.*
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_status_cycle.*
 import java.util.*
+import kotlin.system.exitProcess
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -41,8 +43,12 @@ class EditProfileActivity : AppCompatActivity() {
             setDataProfileEmpty()
         }
 
-        btnSave.setOnClickListener {
-            try {
+        btnSave.setOnClickListener { saveData() }
+    }
+
+    private fun saveData() {
+        try {
+            if (fieldsFilled()) {
                 MyApplication.database!!.profileDao().insert(
                     Profile(
                         uid = auth.currentUser!!.uid,
@@ -59,11 +65,49 @@ class EditProfileActivity : AppCompatActivity() {
                     Intent(
                         this@EditProfileActivity, StatusCycleActivity::class.java)
                 )
-            } catch (e: Exception) {
-                setDataProfileEmpty()
-                Toast.makeText(this,"Erro ao salvar os dados!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    this,"Preencha todos os dados para salvar!",
+                    Toast.LENGTH_LONG
+                ).show()
             }
+        } catch (e: Exception) {
+            setDataProfileEmpty()
+            Toast.makeText(this,"Erro ao salvar os dados!", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun deleteAccount() {
+        val builder = AlertDialog.Builder(this)
+
+        builder.setTitle(R.string.first_status_cycle_delete_account_title)
+        builder.setMessage(R.string.first_status_cycle_delete_account_message_title)
+
+        builder.setPositiveButton(R.string.first_status_cycle_delete_text_yes) { dialog, which ->
+            MyApplication.database!!.cycleDao().delete(auth.currentUser!!.uid)
+            MyApplication.database!!.profileDao().delete(auth.currentUser!!.uid)
+            Toast.makeText(
+                this,
+                "Dados apagados com sucesso!",
+                Toast.LENGTH_LONG
+            ).show()
+
+            auth.signOut()
+
+            moveTaskToBack(true)
+            exitProcess(-1)
+        }
+
+        builder.setNegativeButton(R.string.first_status_cycle_delete_text_no) { dialog, which -> }
+
+        builder.show()
+    }
+
+    private fun fieldsFilled(): Boolean {
+        return edtName.text.isNotBlank() &&
+            edtHeight.text.isNotBlank() &&
+            edtWeigth.text.isNotBlank() &&
+            edtAge.text.isNotBlank()
     }
 
     private fun setDataProfile(profile: Profile) {
@@ -89,7 +133,11 @@ class EditProfileActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.action_save -> {
-                // open edit screen
+                saveData()
+                true
+            }
+            R.id.action_delete -> {
+                deleteAccount()
                 true
             }
             else -> super.onOptionsItemSelected(item)

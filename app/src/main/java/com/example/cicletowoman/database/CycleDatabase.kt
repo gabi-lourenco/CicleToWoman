@@ -10,7 +10,7 @@ import com.example.cicletowoman.entities.Profile
 @Database(entities = [ActualCycle::class, Profile::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun userDao(): ActualCycleDao
+    abstract fun cycleDao(): ActualCycleDao
 
     abstract fun profileDao(): ProfileDao
 }

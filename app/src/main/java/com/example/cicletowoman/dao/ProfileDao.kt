@@ -16,6 +16,6 @@ interface ProfileDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg user: Profile)
 
-    @Delete
-    fun delete(user: Profile)
+    @Query("DELETE FROM profile WHERE uid = :uid")
+    fun delete(uid: String)
 }

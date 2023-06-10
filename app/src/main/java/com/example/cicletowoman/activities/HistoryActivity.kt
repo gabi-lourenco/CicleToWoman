@@ -1,6 +1,5 @@
 package com.example.cicletowoman.activities
 
-import android.icu.util.DateInterval
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -13,6 +12,7 @@ import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
 import com.example.cicletowoman.bottomsheet.EditDayBottomSheetDialog
 import com.example.cicletowoman.entities.ActualCycle
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_first_period.*
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_history.cosmo_calendar
@@ -21,12 +21,17 @@ import java.util.*
 
 class HistoryActivity : AppCompatActivity() {
 
+
+    lateinit var auth : FirebaseAuth
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
-        val cycle = MyApplication.database!!.userDao().findByRunning()
+        auth = FirebaseAuth.getInstance()
+
+        val cycle = MyApplication.database!!.cycleDao().findByRunning(auth.currentUser!!.uid)
 
         try {
             setConfigCalendar()

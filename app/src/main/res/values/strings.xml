@@ -13,6 +13,8 @@
     <string name="first_status_cycle_history_text_button">Histórico</string>
     <string name="first_status_cycle_delete_text_button">Apagar dados</string>
     <string name="first_status_cycle_delete_title">Apagar dados do ciclo</string>
+    <string name="first_status_cycle_delete_account_title">Apagar sua conta e dados?</string>
+    <string name="first_status_cycle_delete_account_message_title">Deseja apagar sua conta e dados(Isto é permante)?</string>
     <string name="first_status_cycle_delete_messsage">Deseja apagar os dados do ciclo atual?</string>
     <string name="first_status_cycle_delete_text_yes">Sim</string>
     <string name="first_status_cycle_delete_text_no">Nâo</string>
