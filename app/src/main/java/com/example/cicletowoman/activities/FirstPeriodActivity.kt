@@ -27,12 +27,14 @@ class FirstPeriodActivity : AppCompatActivity() {
     private var startDateTimeInMillis: Long? = null
     private var endDate: String? = null
     private var endDateTimeInMillis: Long? = null
+    lateinit var auth : FirebaseAuth
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_first_period)
 
+        auth = FirebaseAuth.getInstance()
 
         setConfigCalendar()
         setOnClickListeners()
@@ -67,7 +69,7 @@ class FirstPeriodActivity : AppCompatActivity() {
                     val userDao = MyApplication.database!!.userDao()
                     userDao.insert(
                         ActualCycle(
-                            uid = UUID.randomUUID().toString(),
+                            uid = auth.currentUser!!.uid,
                             startDate = startDate,
                             endDate = endDate,
                             neutralStartFirst = endDate,
