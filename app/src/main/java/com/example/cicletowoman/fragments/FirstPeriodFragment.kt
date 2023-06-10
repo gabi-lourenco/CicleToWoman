@@ -1,12 +1,15 @@
-package com.example.cicletowoman.activities
+package com.example.cicletowoman.fragments
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
 import com.example.cicletowoman.MyApplication
@@ -14,12 +17,11 @@ import com.example.cicletowoman.R
 import com.example.cicletowoman.entities.ActualCycle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.activity_first_period.*
+import kotlinx.android.synthetic.main.fragment_first_period.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-class FirstPeriodActivity : AppCompatActivity() {
+class FirstPeriodFragment : Fragment() {
 
     private var startDate: String? = null
     private var startDateTimeInMillis: Long? = null
@@ -28,26 +30,30 @@ class FirstPeriodActivity : AppCompatActivity() {
     lateinit var auth : FirebaseAuth
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_first_period)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
+        val view = inflater.inflate(R.layout.fragment_first_period, container, false)
         auth = FirebaseAuth.getInstance()
 
-        setConfigCalendar()
-        setOnClickListeners()
+        setConfigCalendar(view)
+        setOnClickListeners(view)
+
+        return view.rootView
     }
 
-    private fun setConfigCalendar() {
-        cosmo_calendar.firstDayOfWeek = Calendar.MONDAY
-        cosmo_calendar.selectionType = SelectionType.RANGE
+    private fun setConfigCalendar(view: View) {
+        view.cosmo_calendar.firstDayOfWeek = Calendar.MONDAY
+        view.cosmo_calendar.selectionType = SelectionType.RANGE
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun setOnClickListeners() {
-        btnContinue.setOnClickListener {
-            if (cosmo_calendar.selectionManager is RangeSelectionManager) {
-                val rangeManager = cosmo_calendar.selectionManager as RangeSelectionManager
+    private fun setOnClickListeners(view: View) {
+        view.btnContinue.setOnClickListener {
+            if (view.cosmo_calendar.selectionManager is RangeSelectionManager) {
+                val rangeManager = view.cosmo_calendar.selectionManager as RangeSelectionManager
                 if (rangeManager != null) {
                     startDateTimeInMillis = rangeManager.days.first?.calendar?.timeInMillis
                     startDate = getDateFormatPTBR(startDateTimeInMillis)
@@ -82,12 +88,10 @@ class FirstPeriodActivity : AppCompatActivity() {
                         )
                     )
 
-                    startActivity(
-                        Intent(
-                            this@FirstPeriodActivity, StatusCycleActivity::class.java))
+                    findNavController().navigate(R.id.action_firstPeriodFragment_to_statusCycleFragment)
                 } else {
                     Toast.makeText(
-                        this@FirstPeriodActivity,
+                        requireActivity(),
                         "Invalid Selection",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -95,10 +99,8 @@ class FirstPeriodActivity : AppCompatActivity() {
             }
         }
 
-        btnLater.setOnClickListener {
-            startActivity(
-                Intent(this@FirstPeriodActivity, StatusCycleActivity::class.java)
-            )
+        view.btnLater.setOnClickListener {
+            findNavController().navigate(R.id.action_firstPeriodFragment_to_statusCycleFragment)
         }
     }
 

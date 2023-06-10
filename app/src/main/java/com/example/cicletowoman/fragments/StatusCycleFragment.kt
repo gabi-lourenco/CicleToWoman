@@ -1,123 +1,107 @@
-package com.example.cicletowoman.activities
+package com.example.cicletowoman.fragments
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
-import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE
-import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE_MILLIS
-import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE
-import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE_MILLIS
 import com.example.cicletowoman.entities.ActualCycle
+import com.example.cicletowoman.viewmodels.StatusCycleViewModel
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_status_cycle.*
+import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
+import kotlinx.android.synthetic.main.fragment_status_cycle.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class StatusCycleActivity : AppCompatActivity() {
+class StatusCycleFragment : Fragment() {
 
     lateinit var auth : FirebaseAuth
 
     var startDay: String = ""
     var endDay: String = ""
-    var startDateMillis: Long? = null
-    var endDateMillis: Long? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_status_cycle)
-        setSupportActionBar(cycletoolbar)
+    val viewModel: StatusCycleViewModel = StatusCycleViewModel()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_status_cycle, container, false)
 
         auth = FirebaseAuth.getInstance()
 
         val cycle = MyApplication.database!!.cycleDao().findByRunning(auth.currentUser!!.uid)
 
-        val startDate = intent.extras?.getString(START_DATE)
-        startDateMillis = intent.extras?.getLong(START_DATE_MILLIS)
-        val endDate = intent.extras?.getString(END_DATE)
-        endDateMillis = intent.extras?.getLong(END_DATE_MILLIS)
-
         try {
-            setDataCycleRunning(cycle)
-        }
-        catch (e: Exception) {
-            txtCycleTitle.text = getString(R.string.first_status_cycle_not_created_title)
-            txtCycleMessageDescription.text = getString(R.string.first_status_cycle_not_created)
-            btnCreate.isVisible = true
-            btnHistory.isVisible = false
-            btnDelete.isVisible = false
-            pieChart_view.isVisible = false
+            setDataCycleRunning(cycle, view)
+        } catch (e: Exception) {
+            view.txtCycleTitle.text = getString(R.string.first_status_cycle_not_created_title)
+            view.txtCycleMessageDescription.text = getString(R.string.first_status_cycle_not_created)
+            view.btnCreate.isVisible = true
+            view.btnHistory.isVisible = false
+            view.btnDelete.isVisible = false
+            view.pieChart_view.isVisible = false
 
-            btnCreate.setOnClickListener {
-                startActivity(
-                    Intent(
-                        this@StatusCycleActivity, FirstPeriodActivity::class.java)
-                )
+            view.btnCreate.setOnClickListener {
+                findNavController().navigate(R.id.action_statusCycleFragment_to_firstPeriodFragment)
+            }
+        }
+
+        return view.rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        view.statustoolbar.inflateMenu(R.menu.menu_status)
+        view.statustoolbar.setTitle(R.string.first_status_cycle_title)
+        view.statustoolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_edit -> {
+                    findNavController().navigate(R.id.action_statusCycleFragment_to_editProfileFragment)
+                    true
+                }
+                else -> {
+                    super.onOptionsItemSelected(it)
+                }
             }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_status, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
-        return when (item.itemId) {
-            R.id.action_edit -> {
-                startActivity(
-                    Intent(
-                        this@StatusCycleActivity, EditProfileActivity::class.java)
-                )
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun setDataCycleRunning(cycle: ActualCycle) {
-        txtCycleTitle.text = getString(R.string.first_status_cycle_title)
-        txtCycleMessageDescription.isVisible = false
-        btnCreate.isVisible = false
-        btnHistory.isVisible = true
-        btnDelete.isVisible = true
+    private fun setDataCycleRunning(cycle: ActualCycle, view: View) {
+        view.txtCycleTitle.text = getString(R.string.first_status_cycle_title)
+        view.txtCycleMessageDescription.isVisible = false
+        view.btnCreate.isVisible = false
+        view.btnHistory.isVisible = true
+        view.btnDelete.isVisible = true
 
         startDay = getDateFormatPTBR(cycle.startDateInMillis)
         endDay = getDateFormatPTBR(cycle.endDateInMillis)
 
-        showPieChart(cycle)
+        showPieChart(cycle, view)
 
-        pieChart_view.isVisible = true
+        view.pieChart_view.isVisible = true
 
-        btnHistory.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@StatusCycleActivity,
-                    HistoryActivity::class.java).apply {
-                    putExtra(START_DATE, cycle.startDateInMillis)
-                    putExtra(END_DATE, cycle.endDateInMillis)
-                }
-            )
+        view.btnHistory.setOnClickListener {
+
+            findNavController().navigate(R.id.action_statusCycleFragment_to_historyFragment)
         }
 
-        btnDelete.setOnClickListener {
+        view.btnDelete.setOnClickListener {
             val cycle = MyApplication.database!!.cycleDao().findByRunning(auth.currentUser!!.uid)
 
-            val builder = AlertDialog.Builder(this)
+            val builder = AlertDialog.Builder(requireActivity())
 
             builder.setTitle(R.string.first_status_cycle_delete_title)
             builder.setMessage(R.string.first_status_cycle_delete_messsage)
@@ -125,13 +109,12 @@ class StatusCycleActivity : AppCompatActivity() {
             builder.setPositiveButton(R.string.first_status_cycle_delete_text_yes) { dialog, which ->
                 MyApplication.database!!.cycleDao().delete(auth.currentUser!!.uid)
                 Toast.makeText(
-                    this,
+                    requireActivity(),
                     "Dados apagados com sucesso!",
                     Toast.LENGTH_LONG
                 ).show()
 
-                finish()
-                startActivity(intent)
+                requireActivity().finish()
             }
 
             builder.setNegativeButton(R.string.first_status_cycle_delete_text_no) { dialog, which -> }
@@ -140,7 +123,7 @@ class StatusCycleActivity : AppCompatActivity() {
         }
     }
 
-    private fun showPieChart(actualCycle: ActualCycle) {
+    private fun showPieChart(actualCycle: ActualCycle, view: View) {
         val pieColors: ArrayList<Int> = ArrayList()
         pieColors.add(Color.parseColor("#FF0000"))
         pieColors.add(Color.parseColor("#2473C8"))
@@ -185,22 +168,24 @@ class StatusCycleActivity : AppCompatActivity() {
         pieData.setDrawValues(false)
 
         //set pieChart data and any other pieChart property needed
-        pieChart_view.data = pieData
-        pieChart_view.setExtraOffsets(35f, 35f, 35f, 35f)
-        pieChart_view.setEntryLabelColor(Color.BLACK)
-        pieChart_view.setEntryLabelTextSize(14f)
-        pieChart_view.setEntryLabelTypeface(Typeface.DEFAULT_BOLD)
-        pieChart_view.setUsePercentValues(true)
-        pieChart_view.legend.isEnabled = false
-        pieChart_view.description.isEnabled = false
-        pieChart_view.description.text = "Em dias"
-        pieChart_view.isRotationEnabled = true
-        pieChart_view.dragDecelerationFrictionCoef = 0.9f
-        pieChart_view.rotationAngle = 220f
-        pieChart_view.isHighlightPerTapEnabled = true
-        pieChart_view.setHoleColor(Color.WHITE)
+        view.apply {
+            pieChart_view.data = pieData
+            pieChart_view.setExtraOffsets(35f, 35f, 35f, 35f)
+            pieChart_view.setEntryLabelColor(Color.BLACK)
+            pieChart_view.setEntryLabelTextSize(14f)
+            pieChart_view.setEntryLabelTypeface(Typeface.DEFAULT_BOLD)
+            pieChart_view.setUsePercentValues(true)
+            pieChart_view.legend.isEnabled = false
+            pieChart_view.description.isEnabled = false
+            pieChart_view.description.text = "Em dias"
+            pieChart_view.isRotationEnabled = true
+            pieChart_view.dragDecelerationFrictionCoef = 0.9f
+            pieChart_view.rotationAngle = 220f
+            pieChart_view.isHighlightPerTapEnabled = true
+            pieChart_view.setHoleColor(Color.WHITE)
 
-        pieChart_view.invalidate()
+            pieChart_view.invalidate()
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

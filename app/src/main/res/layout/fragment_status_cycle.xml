@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.SignInFirebaseActivity">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/cycletoolbar"
+        android:id="@+id/statustoolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +22,7 @@
         android:text="@string/first_status_cycle_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cycletoolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/statustoolbar" />
 
     <TextView
         android:id="@+id/txtCycleMessageDescription"

@@ -73,7 +73,7 @@ class SignInFirebaseActivity : AppCompatActivity() {
                 }
                 startActivity(
                     Intent(
-                    this@SignInFirebaseActivity, StatusCycleActivity::class.java)
+                    this@SignInFirebaseActivity, MainActivity::class.java)
                 )
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {

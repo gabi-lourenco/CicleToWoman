@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/statusCycleFragment">
+
+    <fragment
+        android:id="@+id/statusCycleFragment"
+        android:name="com.example.cicletowoman.fragments.StatusCycleFragment"
+        android:label="StatusCycleFragment" >
+        <action
+            android:id="@+id/action_statusCycleFragment_to_firstPeriodFragment"
+            app:destination="@id/firstPeriodFragment" />
+        <action
+            android:id="@+id/action_statusCycleFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+        <action
+            android:id="@+id/action_statusCycleFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.cicletowoman.fragments.EditProfileFragment"
+        android:label="EditProfileFragment" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_statusCycleFragment"
+            app:destination="@id/statusCycleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/firstPeriodFragment"
+        android:name="com.example.cicletowoman.fragments.FirstPeriodFragment"
+        android:label="FirstPeriodFragment" >
+        <action
+            android:id="@+id/action_firstPeriodFragment_to_statusCycleFragment"
+            app:destination="@id/statusCycleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.cicletowoman.fragments.HistoryFragment"
+        android:label="HistoryFragment" >
+        <action
+            android:id="@+id/action_historyFragment_to_statusCycleFragment"
+            app:destination="@id/statusCycleFragment" />
+    </fragment>
+</navigation>
