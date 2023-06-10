@@ -4,18 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context=".activities.SignInFirebaseActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/cycletoolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtCycleTitle"
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="@string/first_status_cycle_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/cycletoolbar" />
 
     <TextView
         android:id="@+id/txtCycleMessageDescription"
@@ -31,6 +39,7 @@
         android:id="@+id/pieChart_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/btnCreate"
         app:layout_constraintTop_toBottomOf="@+id/txtCycleMessageDescription"
         tools:layout_editor_absoluteX="16dp" />
@@ -53,9 +62,22 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="@string/first_status_cycle_history_text_button"
+        app:layout_constraintBottom_toTopOf="@+id/btnDelete"
+        tools:layout_editor_absoluteX="16dp"/>
+
+    <Button
+        android:id="@+id/btnDelete"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_marginHorizontal="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorRed"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/first_status_cycle_delete_text_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

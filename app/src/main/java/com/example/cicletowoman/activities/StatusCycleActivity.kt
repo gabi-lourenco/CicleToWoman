@@ -5,16 +5,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.room.Room
 import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.END_DATE_MILLIS
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE
 import com.example.cicletowoman.activities.FirstPeriodActivity.Companion.START_DATE_MILLIS
-import com.example.cicletowoman.database.AppDatabase
 import com.example.cicletowoman.entities.ActualCycle
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -23,7 +25,6 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.activity_status_cycle.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class StatusCycleActivity : AppCompatActivity() {
 
@@ -35,7 +36,7 @@ class StatusCycleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status_cycle)
-
+        setSupportActionBar(cycletoolbar)
         val cycle = MyApplication.database!!.userDao().findByRunning()
 
         val startDate = intent.extras?.getString(START_DATE)
@@ -51,6 +52,7 @@ class StatusCycleActivity : AppCompatActivity() {
             txtCycleMessageDescription.text = getString(R.string.first_status_cycle_not_created)
             btnCreate.isVisible = true
             btnHistory.isVisible = false
+            btnDelete.isVisible = false
             pieChart_view.isVisible = false
 
             btnCreate.setOnClickListener {
@@ -62,11 +64,31 @@ class StatusCycleActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_status, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.action_edit -> {
+                startActivity(
+                    Intent(
+                        this@StatusCycleActivity, EditProfileActivity::class.java)
+                )
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun setDataCycleRunning(cycle: ActualCycle) {
         txtCycleTitle.text = getString(R.string.first_status_cycle_title)
         txtCycleMessageDescription.isVisible = false
         btnCreate.isVisible = false
         btnHistory.isVisible = true
+        btnDelete.isVisible = true
 
         startDay = getDateFormatPTBR(cycle.startDateInMillis)
         endDay = getDateFormatPTBR(cycle.endDateInMillis)
@@ -84,6 +106,31 @@ class StatusCycleActivity : AppCompatActivity() {
                     putExtra(END_DATE, cycle.endDateInMillis)
                 }
             )
+        }
+
+        btnDelete.setOnClickListener {
+            val cycle = MyApplication.database!!.userDao().findByRunning()
+
+            val builder = AlertDialog.Builder(this)
+
+            builder.setTitle(R.string.first_status_cycle_delete_title)
+            builder.setMessage(R.string.first_status_cycle_delete_messsage)
+
+            builder.setPositiveButton(R.string.first_status_cycle_delete_text_yes) { dialog, which ->
+                MyApplication.database!!.userDao().delete(cycle)
+                Toast.makeText(
+                    this,
+                    "Dados apagados com sucesso!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                finish()
+                startActivity(intent)
+            }
+
+            builder.setNegativeButton(R.string.first_status_cycle_delete_text_no) { dialog, which -> }
+
+            builder.show()
         }
     }
 

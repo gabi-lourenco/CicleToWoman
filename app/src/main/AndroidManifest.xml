@@ -33,5 +33,9 @@
         <activity android:name="com.example.cicletowoman.activities.HistoryActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar"
             android:exported="true" />
+
+        <activity android:name="com.example.cicletowoman.activities.EditProfileActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar"
+            android:exported="true" />
     </application>
 </manifest>
