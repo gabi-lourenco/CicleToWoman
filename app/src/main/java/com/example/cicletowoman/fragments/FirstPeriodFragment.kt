@@ -12,10 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.applikeysolutions.cosmocalendar.selection.RangeSelectionManager
 import com.applikeysolutions.cosmocalendar.utils.SelectionType
-import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
 import com.example.cicletowoman.entities.ActualCycle
-import com.google.firebase.auth.FirebaseAuth
+import androidx.fragment.app.viewModels
+import com.example.cicletowoman.viewmodels.FirstPeriodViewModel
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_first_period.view.*
 import java.text.SimpleDateFormat
@@ -27,16 +27,15 @@ class FirstPeriodFragment : Fragment() {
     private var startDateTimeInMillis: Long? = null
     private var endDate: String? = null
     private var endDateTimeInMillis: Long? = null
-    lateinit var auth : FirebaseAuth
+
+    private val vm: FirstPeriodViewModel by viewModels()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val view = inflater.inflate(R.layout.fragment_first_period, container, false)
-        auth = FirebaseAuth.getInstance()
 
         setConfigCalendar(view)
         setOnClickListeners(view)
@@ -62,7 +61,8 @@ class FirstPeriodFragment : Fragment() {
 
                     val calendar: Calendar = Calendar.getInstance()
                     calendar.timeInMillis = startDateTimeInMillis!!
-                    var inicialDay = endDate!!.substring(0, 2).toInt() - startDate!!.substring(0, 2).toInt()
+                    var inicialDay = endDate!!
+                        .substring(0, 2).toInt() - startDate!!.substring(0, 2).toInt()
                     calendar.add(Calendar.DATE, inicialDay + 7)
                     var normalOne = getDateFormatPTBR(calendar.timeInMillis)
                     calendar.add(Calendar.DATE, 5)
@@ -70,10 +70,9 @@ class FirstPeriodFragment : Fragment() {
                     calendar.add(Calendar.DATE, 12)
                     var endDays = getDateFormatPTBR(calendar.timeInMillis)
 
-                    val userDao = MyApplication.database!!.cycleDao()
-                    userDao.insert(
+                    vm.insertFirstPeriod(
                         ActualCycle(
-                            uid = auth.currentUser!!.uid,
+                            uid = vm.getUserLoggedUid(),
                             startDate = startDate,
                             endDate = endDate,
                             neutralStartFirst = endDate,
@@ -88,11 +87,21 @@ class FirstPeriodFragment : Fragment() {
                         )
                     )
 
-                    findNavController().navigate(R.id.action_firstPeriodFragment_to_statusCycleFragment)
+                    if (vm.cycleInserted == true) {
+                        findNavController().navigate(
+                            R.id.action_firstPeriodFragment_to_statusCycleFragment
+                        )
+                    } else {
+                        Toast.makeText(
+                            requireActivity(),
+                            R.string.first_status_cycle_insert_error,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 } else {
                     Toast.makeText(
                         requireActivity(),
-                        "Invalid Selection",
+                        R.string.first_status_cycle_invalid_selection,
                         Toast.LENGTH_SHORT
                     ).show()
                 }

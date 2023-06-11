@@ -10,6 +10,11 @@
     <string name="first_status_cycle_not_created">Você ainda não definiu um ciclo</string>
     <string name="first_status_cycle_create_text_button">Criar</string>
     <string name="first_status_cycle_profile_title">Seu perfil</string>
+    <string name="first_status_cycle_profile_height">Sua altura</string>
+    <string name="first_status_cycle_profile_weigth">Seu peso</string>
+    <string name="first_status_cycle_profile_age">Sua idade</string>
+    <string name="first_status_cycle_invalid_selection">Seleção inválida</string>
+    <string name="first_status_cycle_select_date">Selecione uma data para editar.</string>
     <string name="first_status_cycle_history_text_button">Histórico</string>
     <string name="first_status_cycle_delete_text_button">Apagar dados</string>
     <string name="first_status_cycle_delete_title">Apagar dados do ciclo</string>
@@ -17,7 +22,14 @@
     <string name="first_status_cycle_delete_account_message_title">Deseja apagar sua conta e dados(Isto é permante)?</string>
     <string name="first_status_cycle_delete_messsage">Deseja apagar os dados do ciclo atual?</string>
     <string name="first_status_cycle_delete_text_yes">Sim</string>
-    <string name="first_status_cycle_delete_text_no">Nâo</string>
+    <string name="first_status_cycle_delete_text_no">Não</string>
+    <string name="first_status_cycle_delete_success">Dados apagados com sucesso!</string>
+    <string name="first_status_cycle_save_success">Dados salvos com sucesso!</string>
+    <string name="first_status_cycle_profile_set_fields">Preencha todos os dados para salvar!</string>
+    <string name="first_status_cycle_insert_success">Sucesso ao inserir dados do ciclo!</string>
+    <string name="first_status_cycle_deleted_account_success">Conta apagada com sucesso!</string>
+    <string name="first_status_cycle_insert_error">Erro ao inserir dados do ciclo!</string>
+    <string name="first_status_cycle_delete_error">Erro ao apagar os dados do ciclo!</string>
     <string name="first_status_cycle_history_edit_text_button">Editar</string>
     <string name="webclient_id">159132313642-htc5p54sp04j718kgf5u8d5t4nvak123.apps.googleusercontent.com</string>
 </resources>

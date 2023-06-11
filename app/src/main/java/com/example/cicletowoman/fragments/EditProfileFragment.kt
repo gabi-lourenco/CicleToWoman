@@ -7,17 +7,17 @@ import androidx.appcompat.app.AlertDialog
 import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
 import com.example.cicletowoman.entities.Profile
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import kotlin.system.exitProcess
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.cicletowoman.viewmodels.EditProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 
 class EditProfileFragment : Fragment() {
 
-    private lateinit var auth : FirebaseAuth
-    var firebaseDatabase: FirebaseDatabase? = null
+    private val vm: EditProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,18 +25,18 @@ class EditProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
 
-        auth = FirebaseAuth.getInstance()
-        firebaseDatabase = FirebaseDatabase.getInstance()
+        vm.getUserProfile()
 
-        val profile = MyApplication.database!!.profileDao().getByUid(auth.currentUser!!.uid)
-
-        try {
-            setDataProfile(profile, view)
-        } catch (e: Exception) {
-            setDataProfileEmpty(view)
+        vm.profileData?.observe(requireActivity()) { profile ->
+            profile?.let {
+                setDataProfile(profile, view)
+            } ?: run {
+                setDataProfileEmpty(view)
+            }
         }
 
         view.btnSave.setOnClickListener { saveData(view) }
+
         return view.rootView
     }
 
@@ -67,7 +67,7 @@ class EditProfileFragment : Fragment() {
             if (fieldsFilled(view)) {
                 MyApplication.database!!.profileDao().insert(
                     Profile(
-                        uid = auth.currentUser!!.uid,
+                        uid = vm.getUserLoggedUid(),
                         name = view.edtName.text.toString(),
                         weight = view.edtWeigth.text.toString(),
                         height = view.edtHeight.text.toString(),
@@ -75,18 +75,23 @@ class EditProfileFragment : Fragment() {
                     )
                 )
 
-                Toast.makeText(requireActivity(),"Dados salvos com sucesso!", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireActivity(),
+                    R.string.first_status_cycle_save_success, Toast.LENGTH_LONG
+                ).show()
 
                 findNavController().navigate(R.id.action_editProfileFragment_to_statusCycleFragment)
             } else {
                 Toast.makeText(
-                    requireActivity(),"Preencha todos os dados para salvar!",
+                    requireActivity(),R.string.first_status_cycle_profile_set_fields,
                     Toast.LENGTH_LONG
                 ).show()
             }
         } catch (e: Exception) {
             setDataProfileEmpty(view)
-            Toast.makeText(requireActivity(),"Erro ao salvar os dados!", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireActivity(), R.string.first_status_cycle_insert_error, Toast.LENGTH_LONG
+            ).show()
         }
     }
 
@@ -96,22 +101,30 @@ class EditProfileFragment : Fragment() {
         builder.setTitle(R.string.first_status_cycle_delete_account_title)
         builder.setMessage(R.string.first_status_cycle_delete_account_message_title)
 
-        builder.setPositiveButton(R.string.first_status_cycle_delete_text_yes) { dialog, which ->
-            MyApplication.database!!.cycleDao().delete(auth.currentUser!!.uid)
-            MyApplication.database!!.profileDao().delete(auth.currentUser!!.uid)
-            Toast.makeText(
-                requireActivity(),
-                "Dados apagados com sucesso!",
-                Toast.LENGTH_LONG
-            ).show()
+        builder.setPositiveButton(R.string.first_status_cycle_delete_text_yes) { _, _ ->
+            vm.deleteUserCycle()
 
-            auth.signOut()
+            if (vm.dataDeleted == true) {
+                Toast.makeText(
+                    requireActivity(),
+                    R.string.first_status_cycle_deleted_account_success,
+                    Toast.LENGTH_LONG
+                ).show()
 
-            requireActivity().moveTaskToBack(true)
-            exitProcess(-1)
+                FirebaseAuth.getInstance().signOut()
+
+                requireActivity().moveTaskToBack(true)
+                exitProcess(-1)
+            } else {
+                Toast.makeText(
+                    requireActivity(),
+                    R.string.first_status_cycle_insert_error,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
 
-        builder.setNegativeButton(R.string.first_status_cycle_delete_text_no) { dialog, which -> }
+        builder.setNegativeButton(R.string.first_status_cycle_delete_text_no) { _, _ -> }
 
         builder.show()
     }
@@ -134,10 +147,10 @@ class EditProfileFragment : Fragment() {
 
     private fun setDataProfileEmpty(view: View) {
         view.apply {
-            edtName.setText(auth.currentUser!!.displayName)
-            edtHeight.hint = "Sua altura"
-            edtWeigth.hint = "Seu peso"
-            edtAge.hint = "Sua idade"
+            edtName.setText(vm.getUserLoggedName())
+            edtHeight.hint = getString(R.string.first_status_cycle_profile_height)
+            edtWeigth.hint = getString(R.string.first_status_cycle_profile_weigth)
+            edtAge.hint = getString(R.string.first_status_cycle_profile_age)
         }
     }
 }

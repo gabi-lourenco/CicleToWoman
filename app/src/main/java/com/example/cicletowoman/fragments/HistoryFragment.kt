@@ -66,7 +66,7 @@ class HistoryFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         requireActivity(),
-                        "Selecione uma data para editar.",
+                        R.string.first_status_cycle_select_date,
                         Toast.LENGTH_LONG
                     ).show()
                 }

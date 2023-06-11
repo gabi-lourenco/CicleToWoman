@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.cicletowoman.MyApplication
 import com.example.cicletowoman.R
 import com.example.cicletowoman.entities.ActualCycle
 import com.example.cicletowoman.viewmodels.StatusCycleViewModel
@@ -18,7 +18,6 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_edit_profile.view.*
 import kotlinx.android.synthetic.main.fragment_status_cycle.view.*
 import java.text.SimpleDateFormat
@@ -26,12 +25,10 @@ import java.util.*
 
 class StatusCycleFragment : Fragment() {
 
-    lateinit var auth : FirebaseAuth
-
     var startDay: String = ""
     var endDay: String = ""
 
-    val viewModel: StatusCycleViewModel = StatusCycleViewModel()
+    private val vm: StatusCycleViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,22 +36,26 @@ class StatusCycleFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_status_cycle, container, false)
 
-        auth = FirebaseAuth.getInstance()
+        vm.getUserLogged()
 
-        val cycle = MyApplication.database!!.cycleDao().findByRunning(auth.currentUser!!.uid)
+        vm.actualCycle?.observe(requireActivity()) { cycle ->
+            cycle?.let {
+                setDataCycleRunning(cycle, view)
+            } ?: run {
+                view.apply {
+                    txtCycleTitle.text = getString(R.string.first_status_cycle_not_created_title)
+                    txtCycleTitle.isVisible = true
+                    btnCreate.isVisible = true
+                    btnHistory.isVisible = false
+                    btnDelete.isVisible = false
+                    pieChart_view.isVisible = false
 
-        try {
-            setDataCycleRunning(cycle, view)
-        } catch (e: Exception) {
-            view.txtCycleTitle.text = getString(R.string.first_status_cycle_not_created_title)
-            view.txtCycleMessageDescription.text = getString(R.string.first_status_cycle_not_created)
-            view.btnCreate.isVisible = true
-            view.btnHistory.isVisible = false
-            view.btnDelete.isVisible = false
-            view.pieChart_view.isVisible = false
-
-            view.btnCreate.setOnClickListener {
-                findNavController().navigate(R.id.action_statusCycleFragment_to_firstPeriodFragment)
+                    btnCreate.setOnClickListener {
+                        findNavController().navigate(
+                            R.id.action_statusCycleFragment_to_firstPeriodFragment
+                        )
+                    }
+                }
             }
         }
 
@@ -69,7 +70,9 @@ class StatusCycleFragment : Fragment() {
         view.statustoolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.action_edit -> {
-                    findNavController().navigate(R.id.action_statusCycleFragment_to_editProfileFragment)
+                    findNavController().navigate(
+                        R.id.action_statusCycleFragment_to_editProfileFragment
+                    )
                     true
                 }
                 else -> {
@@ -80,46 +83,53 @@ class StatusCycleFragment : Fragment() {
     }
 
     private fun setDataCycleRunning(cycle: ActualCycle, view: View) {
-        view.txtCycleTitle.text = getString(R.string.first_status_cycle_title)
-        view.txtCycleMessageDescription.isVisible = false
-        view.btnCreate.isVisible = false
-        view.btnHistory.isVisible = true
-        view.btnDelete.isVisible = true
+        view.apply {
+            txtCycleTitle.isVisible = false
+            txtCycleMessageDescription.isVisible = false
+            btnCreate.isVisible = false
+            btnHistory.isVisible = true
+            btnDelete.isVisible = true
+        }
 
         startDay = getDateFormatPTBR(cycle.startDateInMillis)
         endDay = getDateFormatPTBR(cycle.endDateInMillis)
 
         showPieChart(cycle, view)
-
         view.pieChart_view.isVisible = true
 
         view.btnHistory.setOnClickListener {
-
             findNavController().navigate(R.id.action_statusCycleFragment_to_historyFragment)
         }
 
         view.btnDelete.setOnClickListener {
-            val cycle = MyApplication.database!!.cycleDao().findByRunning(auth.currentUser!!.uid)
+            vm.actualCycle?.let {
+                val builder = AlertDialog.Builder(requireActivity())
 
-            val builder = AlertDialog.Builder(requireActivity())
+                builder.apply {
+                    setTitle(R.string.first_status_cycle_delete_title)
+                    setMessage(R.string.first_status_cycle_delete_messsage)
+                    setPositiveButton(R.string.first_status_cycle_delete_text_yes) { _, _ ->
+                        vm.deleteUserCycle()
+                        if (vm.cycleDeleted == true) {
+                            Toast.makeText(
+                                requireActivity(),
+                                R.string.first_status_cycle_delete_success,
+                                Toast.LENGTH_LONG
+                            ).show()
 
-            builder.setTitle(R.string.first_status_cycle_delete_title)
-            builder.setMessage(R.string.first_status_cycle_delete_messsage)
-
-            builder.setPositiveButton(R.string.first_status_cycle_delete_text_yes) { dialog, which ->
-                MyApplication.database!!.cycleDao().delete(auth.currentUser!!.uid)
-                Toast.makeText(
-                    requireActivity(),
-                    "Dados apagados com sucesso!",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                requireActivity().finish()
+                            requireActivity().finish()
+                        } else {
+                            Toast.makeText(
+                                requireActivity(),
+                                R.string.first_status_cycle_delete_error,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                    setNegativeButton(R.string.first_status_cycle_delete_text_no) { _, _ -> }
+                    show()
+                }
             }
-
-            builder.setNegativeButton(R.string.first_status_cycle_delete_text_no) { dialog, which -> }
-
-            builder.show()
         }
     }
 
