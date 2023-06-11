@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Cicle to Woman</string>
+    <string name="login_google_signin_text">Sign with Google</string>
+    <string name="first_period_title">Your last cycle started when?</string>
+    <string name="first_period_predict_text">So we can predict the next.</string>
+    <string name="first_period_continue_text_button">Continue</string>
+    <string name="first_period_add_later_text_button">Later</string>
+    <string name="first_status_cycle_title">Your current cycle</string>
+    <string name="first_status_cycle_not_created_title">There is still time</string>
+    <string name="first_status_cycle_not_created">You have nott defined a cycle yet</string>
+    <string name="first_status_cycle_create_text_button">Create</string>
+    <string name="first_status_cycle_profile_title">Your Profile</string>
+    <string name="first_status_cycle_profile_height">Your Height</string>
+    <string name="first_status_cycle_profile_weigth">Your weight</string>
+    <string name="first_status_cycle_profile_age">Your age</string>
+    <string name="first_status_cycle_invalid_selection">Invalid selection</string>
+    <string name="first_status_cycle_select_date"> Select a date to edit.</string>
+    <string name="first_status_cycle_history_text_button">History</string>
+    <string name="first_status_cycle_delete_text_button">Delete data</string>
+    <string name="first_status_cycle_delete_title">Delete cycle data</string>
+    <string name="first_status_cycle_delete_account_title">Delete your account and data?</string>
+    <string name="first_status_cycle_delete_account_message_title">Do you want to delete your account and data (This is permanent)?</string>
+    <string name="first_status_cycle_delete_messsage"> Do you want to delete the current cycle data?</string>
+    <string name="first_status_cycle_delete_text_yes">Yes</string>
+    <string name="first_status_cycle_delete_text_no">No</string>
+    <string name="first_status_cycle_delete_success">Data deleted successfully!</string>
+    <string name="first_status_cycle_save_success">Data saved successfully!</string>
+    <string name="first_status_cycle_profile_set_fields">Fill in all the data to save!</string>
+    <string name="first_status_cycle_insert_success">Successfully inserted cycle data!</string>
+    <string name="first_status_cycle_deleted_account_success">Account deleted successfully!</string>
+    <string name="first_status_cycle_insert_error">Error inserting cycle data!</string>
+    <string name="first_status_cycle_delete_error">Error deleting cycle data!</string>
+    <string name="first_status_cycle_history_edit_text_button">Edit</string>
+    <string name="webclient_id">159132313642-htc5p54sp04j718kgf5u8d5t4nvak123.apps.googleusercontent.com</string>
+</resources>
