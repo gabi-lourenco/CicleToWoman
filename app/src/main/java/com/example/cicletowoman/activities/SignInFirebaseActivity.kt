@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.cicletowoman.R
 import com.example.cicletowoman.constants.TablesNames
-import com.example.cicletowoman.data.FirstPeriodCreatedData
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -30,7 +29,6 @@ class SignInFirebaseActivity : AppCompatActivity() {
 
     var userId = ""
 
-    private var firstPeriodStartedData = FirstPeriodCreatedData(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
